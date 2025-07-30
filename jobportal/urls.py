@@ -18,14 +18,31 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+import os
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('jobs.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-]
+# Import demo view for Vercel deployment
+if 'VERCEL' in os.environ:
+    from demo_views import demo_view
 
-if settings.DEBUG:
+urlpatterns = []
+
+# For Vercel deployment, use simple demo view
+if 'VERCEL' in os.environ:
+    urlpatterns = [
+        path('', demo_view, name='demo'),
+        path('admin/', demo_view, name='demo_admin'),
+        path('accounts/', demo_view, name='demo_accounts'),
+        path('jobs/', demo_view, name='demo_jobs'),
+    ]
+else:
+    # Local development with full functionality
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('jobs.urls')),
+        path('accounts/', include('accounts.urls')),
+        path('accounts/', include('django.contrib.auth.urls')),
+    ]
+
+if settings.DEBUG and 'VERCEL' not in os.environ:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0] if settings.STATICFILES_DIRS else None)
