@@ -209,7 +209,7 @@ jobs = jobs.filter(
 ## 🚀 Deployment
 
 ### Live Demo
-🌐 **[View Live Application](https://vecel1.vercel.app)** - Your Django Job Portal is now live!
+🌐 **[View Live Application](https://job-search-punam.vercel.app)** - Your Django Job Portal is now live and working!
 
 ### Quick Deploy to Vercel
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/punam06/jobSearch)
