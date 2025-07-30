@@ -206,6 +206,42 @@ jobs = jobs.filter(
 - **Custom List Views**: Optimized for admin tasks
 - **Search and Filtering**: Easy data management
 
+## 🚀 Deployment
+
+### Live Demo
+🌐 **[View Live Application](https://your-vercel-url.vercel.app)** (Deploy to get your URL)
+
+### Quick Deploy to Vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/jobsearch)
+
+### Deployment Options
+
+#### 1. Vercel (Recommended)
+```bash
+# Push to GitHub first
+git push origin main
+
+# Deploy to Vercel
+npm install -g vercel
+vercel login
+vercel
+```
+
+#### 2. Manual Deployment
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions including:
+- Vercel deployment (step-by-step)
+- Railway deployment
+- Heroku deployment
+- DigitalOcean App Platform
+
+### Environment Configuration
+The application is pre-configured for deployment with:
+- `vercel.json` - Vercel configuration
+- `build_files.sh` - Build script
+- `requirements.txt` - Dependencies
+- Static files configuration
+- WhiteNoise for static file serving
+
 ## 🚀 Deployment Ready
 
 The application is ready for deployment with:
