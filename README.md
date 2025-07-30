@@ -209,10 +209,10 @@ jobs = jobs.filter(
 ## 🚀 Deployment
 
 ### Live Demo
-🌐 **[View Live Application](https://your-vercel-url.vercel.app)** (Deploy to get your URL)
+🌐 **[View Live Application](https://vecel1.vercel.app)** - Your Django Job Portal is now live!
 
 ### Quick Deploy to Vercel
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/jobsearch)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/punam06/jobSearch)
 
 ### Deployment Options
 
