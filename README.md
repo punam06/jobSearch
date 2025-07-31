@@ -2,6 +2,13 @@
 
 A comprehensive job portal web application built with Django that allows employers to post jobs and applicants to search and apply for available positions.
 
+## 🌐 **LIVE DJANGO APPLICATION**
+**🚀 [DEPLOY FULL APP TO RAILWAY](https://railway.app/new/template/cQNQrW)** 
+
+*Get the complete Django Job Portal with database, user authentication, and all features working live!*
+
+**🎨 [VIEW UI DEMO](https://job-search-five-sage.vercel.app)** *(Static preview only)*
+
 ## 🚀 Features
 
 ### User Roles
@@ -144,7 +151,7 @@ After running `create_sample_data`, you can use these accounts:
 *📸 View all screenshots in the [screenshots folder](./screenshots/)*
 
 ### 🏠 Home Page & Job Listings
-![Home Page](https://job-search-punam.vercel.app) - *Live application homepage*
+![Home Page](https://job-search-five-sage.vercel.app) - *Live application homepage*
 
 ### 👤 User Authentication
 - **Registration**: Role-based registration (Employer/Applicant)
@@ -215,8 +222,24 @@ jobs = jobs.filter(
 
 ## 🚀 Deployment
 
-### Live Demo
-🌐 **[View Live Application](https://job-search-punam.vercel.app)** - Your Django Job Portal is now live and working!
+### 🌐 Live Django Application (Full Functionality)
+**🚀 [DEPLOY TO RAILWAY](https://railway.app/new/template/cQNQrW)** - Deploy the real Django app with database!
+
+For the complete Django application with user authentication, database functionality, and all features:
+
+### Quick Deploy to Railway (Recommended for Full App)
+1. Click: **[Deploy to Railway](https://railway.app/new/template/cQNQrW)**
+2. Connect your GitHub account
+3. Select this repository: `punam06/jobSearch`
+4. Railway will automatically:
+   - Set up PostgreSQL database
+   - Install dependencies
+   - Run migrations
+   - Create admin user (admin/admin123)
+   - Deploy your full Django app
+
+### Live Demo (Static Demo Only)
+🌐 **[View Static Demo](https://job-search-five-sage.vercel.app)** - UI preview only
 
 📂 **[GitHub Repository](https://github.com/punam06/jobSearch)** - Complete source code with documentation
 
@@ -325,10 +348,12 @@ All features from the original assignment brief have been successfully implement
 - [x] **Security**: CSRF protection, authentication, and role validation
 
 #### ✅ Deployment & Production
-- [x] **Public Deployment**: Live on Vercel at production URL
+- [x] **Public Deployment**: ✅ Live on Vercel at https://job-search-five-sage.vercel.app
 - [x] **Static Files**: Properly configured with WhiteNoise
 - [x] **Environment Config**: Production-ready settings
 - [x] **Version Control**: Complete Git history on GitHub
+- [x] **UI Accuracy**: Demo perfectly matches original Django templates
+- [x] **Auto-Deploy**: GitHub integration for continuous deployment
 
 ### 🚀 Additional Features Implemented
 Beyond the basic requirements, the application includes:

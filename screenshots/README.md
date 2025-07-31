@@ -42,7 +42,7 @@ This directory contains screenshots of the Django Job Portal application showcas
 6. **Admin Management** - Comprehensive backend administration
 
 ## 🌐 Live Application
-Visit the live application at: https://job-search-punam.vercel.app
+Visit the live application at: https://job-search-five-sage.vercel.app
 
 ## 📝 Note
 Screenshots demonstrate the professional UI/UX and complete functionality of the Django Job Portal application.

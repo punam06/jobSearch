@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-zg5$078u)#$8fr(muc=k+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*.railway.app', '.railway.app', '*']
 
 
 # Application definition
@@ -115,6 +115,12 @@ if 'VERCEL' in os.environ:
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': '/tmp/db.sqlite3',  # Use tmp directory for Vercel
         }
+    }
+elif 'RAILWAY_ENVIRONMENT' in os.environ or 'DATABASE_URL' in os.environ:
+    # Railway/Production deployment with PostgreSQL
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
 else:
     # Local development with SQLite
