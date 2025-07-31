@@ -32,11 +32,11 @@ ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*']
 # Application definition
 
 if 'VERCEL' in os.environ:
-    # For Vercel deployment, use a minimal apps configuration
+    # For Vercel deployment, use minimal apps configuration (no database-dependent apps)
     INSTALLED_APPS = [
         'django.contrib.contenttypes',
         'django.contrib.staticfiles',
-        'jobs',  # Keep for templates but minimal models
+        # Remove 'jobs' app to avoid User model imports that need SQLite
     ]
     
     # Minimal middleware for Vercel

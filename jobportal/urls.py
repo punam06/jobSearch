@@ -22,17 +22,18 @@ import os
 
 # Import demo view for Vercel deployment
 if 'VERCEL' in os.environ:
-    from demo_views import demo_view
+    from demo_views import demo_home, demo_view
 
 urlpatterns = []
 
 # For Vercel deployment, use demo view
 if 'VERCEL' in os.environ:
     urlpatterns = [
-        path('', demo_view, name='demo_home'),
+        path('', demo_home, name='demo_home'),
         path('jobs/', demo_view, name='demo_jobs'),
         path('accounts/register/', demo_view, name='demo_register'),
         path('accounts/login/', demo_view, name='demo_login'),
+        path('post-job/', demo_view, name='demo_post_job'),
         path('admin/', demo_view, name='demo_admin'),
         path('demo/', demo_view, name='demo_page'),
     ]

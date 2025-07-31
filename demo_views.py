@@ -1,191 +1,277 @@
 from django.http import HttpResponse
-from django.template import Template, Context
-import os
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
-def demo_view(request):
-    """
-    Simple demo view for showcasing the job portal
-    """
-    html_content = """
+def demo_home(request):
+    """Demo home page for Vercel deployment"""
+    return HttpResponse("""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Job Portal Demo - Django Application</title>
+        <title>Job Portal - Demo</title>
         <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                line-height: 1.6;
-                margin: 0;
-                padding: 0;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: #333;
+            body { 
+                font-family: Arial, sans-serif; 
+                margin: 0; 
+                padding: 20px; 
+                background-color: #f5f5f5; 
             }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
+            .container { 
+                max-width: 1200px; 
+                margin: 0 auto; 
+                background: white; 
+                padding: 20px; 
+                border-radius: 8px; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
             }
-            .header {
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 10px;
-                padding: 30px;
-                margin-bottom: 30px;
-                text-align: center;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            .header { 
+                text-align: center; 
+                margin-bottom: 30px; 
+                padding: 20px; 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                color: white; 
+                border-radius: 8px; 
             }
-            .header h1 {
-                color: #2c3e50;
-                margin: 0 0 10px 0;
-                font-size: 2.5em;
+            .job-card { 
+                border: 1px solid #ddd; 
+                margin: 15px 0; 
+                padding: 20px; 
+                border-radius: 8px; 
+                background: #f9f9f9; 
             }
-            .subtitle {
-                color: #7f8c8d;
-                font-size: 1.2em;
+            .job-title { 
+                color: #333; 
+                font-size: 18px; 
+                font-weight: bold; 
+                margin-bottom: 10px; 
             }
-            .features {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 20px;
-                margin-bottom: 30px;
+            .job-company { 
+                color: #666; 
+                font-size: 16px; 
+                margin-bottom: 5px; 
             }
-            .feature-card {
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 10px;
-                padding: 25px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
+            .job-location { 
+                color: #888; 
+                font-size: 14px; 
+                margin-bottom: 10px; 
             }
-            .feature-card:hover {
-                transform: translateY(-5px);
+            .job-description { 
+                color: #555; 
+                line-height: 1.6; 
             }
-            .feature-card h3 {
-                color: #2c3e50;
-                margin: 0 0 15px 0;
-                font-size: 1.3em;
+            .nav-links { 
+                text-align: center; 
+                margin: 20px 0; 
             }
-            .feature-list {
-                list-style: none;
-                padding: 0;
+            .nav-links a { 
+                margin: 0 15px; 
+                padding: 10px 20px; 
+                background: #667eea; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+                display: inline-block; 
             }
-            .feature-list li {
-                padding: 5px 0;
-                color: #555;
+            .nav-links a:hover { 
+                background: #764ba2; 
             }
-            .feature-list li:before {
-                content: "✓ ";
-                color: #27ae60;
-                font-weight: bold;
-            }
-            .demo-info {
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 10px;
-                padding: 25px;
-                text-align: center;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            }
-            .tech-stack {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-top: 20px;
-            }
-            .tech-badge {
-                background: #3498db;
-                color: white;
-                padding: 5px 15px;
-                border-radius: 20px;
-                font-size: 0.9em;
-            }
-            .status-badge {
-                background: #27ae60;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 25px;
-                font-weight: bold;
-                font-size: 1.1em;
-                margin-bottom: 20px;
-                display: inline-block;
+            .demo-notice { 
+                background: #fff3cd; 
+                border: 1px solid #ffeaa7; 
+                color: #856404; 
+                padding: 15px; 
+                border-radius: 5px; 
+                margin: 20px 0; 
+                text-align: center; 
             }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
-                <h1>🚀 Job Portal Demo</h1>
-                <p class="subtitle">Full-Featured Django Job Search Platform</p>
-                <div class="status-badge">✅ Successfully Deployed on Vercel</div>
+                <h1>🚀 Job Portal</h1>
+                <p>Find Your Dream Job Today!</p>
             </div>
-
-            <div class="features">
-                <div class="feature-card">
-                    <h3>👥 User Management</h3>
-                    <ul class="feature-list">
-                        <li>Job Seeker Registration</li>
-                        <li>Employer Registration</li>
-                        <li>Profile Management</li>
-                        <li>Authentication System</li>
-                        <li>Role-based Access</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>💼 Job Management</h3>
-                    <ul class="feature-list">
-                        <li>Post Job Listings</li>
-                        <li>Job Search & Filtering</li>
-                        <li>Category Management</li>
-                        <li>Job Application System</li>
-                        <li>Application Tracking</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🎯 Advanced Features</h3>
-                    <ul class="feature-list">
-                        <li>Responsive Design</li>
-                        <li>Admin Panel</li>
-                        <li>File Upload (Resume/CV)</li>
-                        <li>Email Notifications</li>
-                        <li>Search Functionality</li>
-                    </ul>
+            
+            <div class="demo-notice">
+                <strong>📢 Demo Mode:</strong> This is a static demo deployed on Vercel. 
+                For full functionality with user registration, login, and job posting, 
+                run locally or deploy with a PostgreSQL database.
+            </div>
+            
+            <div class="nav-links">
+                <a href="/">🏠 Home</a>
+                <a href="/jobs/">💼 Browse Jobs</a>
+                <a href="/accounts/register/">👤 Register</a>
+                <a href="/accounts/login/">🔐 Login</a>
+                <a href="/post-job/">📝 Post Job</a>
+            </div>
+            
+            <h2>📋 Featured Jobs</h2>
+            
+            <div class="job-card">
+                <div class="job-title">Senior Python Developer</div>
+                <div class="job-company">🏢 TechCorp Solutions</div>
+                <div class="job-location">📍 San Francisco, CA</div>
+                <div class="job-description">
+                    We are looking for an experienced Python developer to join our growing team. 
+                    You'll work on exciting projects using Django, PostgreSQL, and modern web technologies.
+                    Requirements: 5+ years Python experience, Django expertise, strong problem-solving skills.
                 </div>
             </div>
-
-            <div class="demo-info">
-                <h3>🎉 Demo Status</h3>
-                <p>This Django job portal application has been successfully deployed to Vercel as a public demo.</p>
-                <p>The application includes all the core features of a modern job search platform built with Django.</p>
-                
-                <h4>🛠️ Technology Stack</h4>
-                <div class="tech-stack">
-                    <span class="tech-badge">Django 5.2.4</span>
-                    <span class="tech-badge">Python</span>
-                    <span class="tech-badge">SQLite</span>
-                    <span class="tech-badge">HTML/CSS</span>
-                    <span class="tech-badge">Bootstrap</span>
-                    <span class="tech-badge">Vercel</span>
+            
+            <div class="job-card">
+                <div class="job-title">Frontend React Developer</div>
+                <div class="job-company">🏢 StartupX</div>
+                <div class="job-location">📍 Remote</div>
+                <div class="job-description">
+                    Join our dynamic startup as a Frontend Developer! You'll build amazing user interfaces 
+                    using React, TypeScript, and modern CSS frameworks. Perfect for someone who loves 
+                    creating beautiful, responsive web applications.
                 </div>
-
-                <h4>📊 Application Components</h4>
-                <p><strong>Apps:</strong> accounts (user management), jobs (job listings), admin panel</p>
-                <p><strong>Models:</strong> User profiles, Job listings, Applications, Categories</p>
-                <p><strong>Views:</strong> Authentication, Job CRUD, Search, Apply functionality</p>
-                
-                <h4>🔗 GitHub Repository</h4>
-                <p>Full source code available with detailed documentation and screenshots</p>
-                
-                <p style="margin-top: 30px; color: #7f8c8d;">
-                    <strong>Note:</strong> This is a demonstration deployment showcasing the application structure and features.
-                    The full application with database functionality runs locally and includes user authentication,
-                    job posting, application management, and admin features.
-                </p>
             </div>
+            
+            <div class="job-card">
+                <div class="job-title">Full Stack Engineer</div>
+                <div class="job-company">🏢 Digital Innovations Ltd</div>
+                <div class="job-location">📍 New York, NY</div>
+                <div class="job-description">
+                    We need a versatile Full Stack Engineer to work on both frontend and backend systems. 
+                    Experience with Python/Django, JavaScript/React, and cloud platforms required. 
+                    Great opportunity for career growth!
+                </div>
+            </div>
+            
+            <div class="job-card">
+                <div class="job-title">Data Science Manager</div>
+                <div class="job-company">🏢 Analytics Pro</div>
+                <div class="job-location">📍 Chicago, IL</div>
+                <div class="job-description">
+                    Lead our data science team in developing machine learning models and analytics solutions. 
+                    Looking for someone with 7+ years experience in Python, SQL, machine learning, and team leadership.
+                </div>
+            </div>
+            
+            <div class="job-card">
+                <div class="job-title">DevOps Engineer</div>
+                <div class="job-company">🏢 CloudFirst</div>
+                <div class="job-location">📍 Austin, TX</div>
+                <div class="job-description">
+                    Help us build and maintain scalable cloud infrastructure. Experience with AWS, Docker, 
+                    Kubernetes, and CI/CD pipelines essential. Join a team that values automation and efficiency.
+                </div>
+            </div>
+            
+            <footer style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+                <p>💻 <strong>Job Portal Demo</strong> - Built with Django & deployed on Vercel</p>
+                <p>🌐 <strong>Live URL:</strong> <a href="https://job-search-five-sage.vercel.app" target="_blank">https://job-search-five-sage.vercel.app</a></p>
+                <p>📚 This is a demonstration of a Django job portal application</p>
+            </footer>
         </div>
     </body>
     </html>
-    """
+    """)
+
+@csrf_exempt
+def demo_view(request):
+    """Generic demo view for all pages"""
+    page_name = request.path.strip('/').replace('/', ' - ').title() or 'Home'
     
-    return HttpResponse(html_content)
+    return HttpResponse(f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Job Portal - {page_name}</title>
+        <style>
+            body {{ 
+                font-family: Arial, sans-serif; 
+                margin: 0; 
+                padding: 20px; 
+                background-color: #f5f5f5; 
+            }}
+            .container {{ 
+                max-width: 800px; 
+                margin: 0 auto; 
+                background: white; 
+                padding: 30px; 
+                border-radius: 8px; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+                text-align: center;
+            }}
+            .header {{ 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                color: white; 
+                padding: 20px; 
+                border-radius: 8px; 
+                margin-bottom: 30px; 
+            }}
+            .demo-notice {{ 
+                background: #fff3cd; 
+                border: 1px solid #ffeaa7; 
+                color: #856404; 
+                padding: 15px; 
+                border-radius: 5px; 
+                margin: 20px 0; 
+            }}
+            .nav-links {{ 
+                margin: 30px 0; 
+            }}
+            .nav-links a {{ 
+                margin: 0 10px; 
+                padding: 10px 20px; 
+                background: #667eea; 
+                color: white; 
+                text-decoration: none; 
+                border-radius: 5px; 
+                display: inline-block; 
+                margin-bottom: 10px;
+            }}
+            .nav-links a:hover {{ 
+                background: #764ba2; 
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚀 Job Portal - {page_name}</h1>
+            </div>
+            
+            <div class="demo-notice">
+                <strong>📢 Demo Mode:</strong> This is a static demo page. 
+                In a full deployment, this would be a functional {page_name.lower()} page 
+                with user authentication, database integration, and full CRUD operations.
+            </div>
+            
+            <h2>🔧 What this page would normally do:</h2>
+            <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+                {"".join([
+                    "<p><strong>🏠 Home:</strong> Display featured jobs, search functionality, and recent postings</p>",
+                    "<p><strong>💼 Jobs:</strong> Browse all available jobs with filtering and pagination</p>",
+                    "<p><strong>👤 Register:</strong> User registration with email verification</p>",
+                    "<p><strong>🔐 Login:</strong> User authentication and session management</p>",
+                    "<p><strong>📝 Post Job:</strong> Employers can post new job listings</p>",
+                    "<p><strong>📋 Applications:</strong> Track job applications and status</p>"
+                ])}
+            </div>
+            
+            <div class="nav-links">
+                <a href="/">🏠 Back to Home</a>
+                <a href="/jobs/">💼 Browse Jobs</a>
+                <a href="/accounts/register/">👤 Register</a>
+                <a href="/accounts/login/">🔐 Login</a>
+                <a href="/post-job/">📝 Post Job</a>
+            </div>
+            
+            <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+                <p>💻 <strong>Job Portal Demo</strong> - Built with Django & deployed on Vercel</p>
+                <p>🌐 For full functionality, run locally with SQLite or deploy with PostgreSQL</p>
+            </footer>
+        </div>
+    </body>
+    </html>
+    """)
