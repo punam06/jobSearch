@@ -3,181 +3,579 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 def demo_home(request):
-    """Demo home page for Vercel deployment"""
+    """Demo home page matching original Django template design"""
     return HttpResponse("""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Job Portal - Demo</title>
+        <title>Home - Job Portal</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
-            body { 
-                font-family: Arial, sans-serif; 
-                margin: 0; 
-                padding: 20px; 
-                background-color: #f5f5f5; 
+            .navbar-brand {
+                font-weight: bold;
+                color: #007bff !important;
             }
-            .container { 
-                max-width: 1200px; 
-                margin: 0 auto; 
-                background: white; 
-                padding: 20px; 
-                border-radius: 8px; 
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            .job-card {
+                transition: transform 0.2s;
+                border: 1px solid #dee2e6;
             }
-            .header { 
-                text-align: center; 
-                margin-bottom: 30px; 
-                padding: 20px; 
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                color: white; 
-                border-radius: 8px; 
+            .job-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
-            .job-card { 
-                border: 1px solid #ddd; 
-                margin: 15px 0; 
-                padding: 20px; 
-                border-radius: 8px; 
-                background: #f9f9f9; 
+            .footer {
+                background-color: #343a40;
+                color: white;
+                padding: 20px 0;
+                margin-top: 50px;
             }
-            .job-title { 
-                color: #333; 
-                font-size: 18px; 
-                font-weight: bold; 
-                margin-bottom: 10px; 
+            .hero-section {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 60px 0;
             }
-            .job-company { 
-                color: #666; 
-                font-size: 16px; 
-                margin-bottom: 5px; 
+            .btn-primary {
+                background-color: #667eea;
+                border-color: #667eea;
             }
-            .job-location { 
-                color: #888; 
-                font-size: 14px; 
-                margin-bottom: 10px; 
+            .btn-primary:hover {
+                background-color: #5a6fd8;
+                border-color: #5a6fd8;
             }
-            .job-description { 
-                color: #555; 
-                line-height: 1.6; 
-            }
-            .nav-links { 
-                text-align: center; 
-                margin: 20px 0; 
-            }
-            .nav-links a { 
-                margin: 0 15px; 
-                padding: 10px 20px; 
-                background: #667eea; 
-                color: white; 
-                text-decoration: none; 
-                border-radius: 5px; 
-                display: inline-block; 
-            }
-            .nav-links a:hover { 
-                background: #764ba2; 
-            }
-            .demo-notice { 
-                background: #fff3cd; 
-                border: 1px solid #ffeaa7; 
-                color: #856404; 
-                padding: 15px; 
-                border-radius: 5px; 
-                margin: 20px 0; 
-                text-align: center; 
+            .demo-notice {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                color: #856404;
+                padding: 10px 15px;
+                border-radius: 5px;
+                margin: 10px 0;
+                font-size: 0.9em;
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="header">
-                <h1>🚀 Job Portal</h1>
-                <p>Find Your Dream Job Today!</p>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-briefcase me-2"></i>JobPortal
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/jobs/">
+                                <i class="fas fa-search me-1"></i>Browse Jobs
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/login/">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/register/">
+                                <i class="fas fa-user-plus me-1"></i>Register
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            
+        </nav>
+
+        <!-- Demo Notice -->
+        <div class="container mt-3">
             <div class="demo-notice">
                 <strong>📢 Demo Mode:</strong> This is a static demo deployed on Vercel. 
-                For full functionality with user registration, login, and job posting, 
-                run locally or deploy with a PostgreSQL database.
+                For full functionality with user authentication and database features, 
+                run locally or deploy with PostgreSQL.
             </div>
-            
-            <div class="nav-links">
-                <a href="/">🏠 Home</a>
-                <a href="/jobs/">💼 Browse Jobs</a>
-                <a href="/accounts/register/">👤 Register</a>
-                <a href="/accounts/login/">🔐 Login</a>
-                <a href="/post-job/">📝 Post Job</a>
-            </div>
-            
-            <h2>📋 Featured Jobs</h2>
-            
-            <div class="job-card">
-                <div class="job-title">Senior Python Developer</div>
-                <div class="job-company">🏢 TechCorp Solutions</div>
-                <div class="job-location">📍 San Francisco, CA</div>
-                <div class="job-description">
-                    We are looking for an experienced Python developer to join our growing team. 
-                    You'll work on exciting projects using Django, PostgreSQL, and modern web technologies.
-                    Requirements: 5+ years Python experience, Django expertise, strong problem-solving skills.
-                </div>
-            </div>
-            
-            <div class="job-card">
-                <div class="job-title">Frontend React Developer</div>
-                <div class="job-company">🏢 StartupX</div>
-                <div class="job-location">📍 Remote</div>
-                <div class="job-description">
-                    Join our dynamic startup as a Frontend Developer! You'll build amazing user interfaces 
-                    using React, TypeScript, and modern CSS frameworks. Perfect for someone who loves 
-                    creating beautiful, responsive web applications.
-                </div>
-            </div>
-            
-            <div class="job-card">
-                <div class="job-title">Full Stack Engineer</div>
-                <div class="job-company">🏢 Digital Innovations Ltd</div>
-                <div class="job-location">📍 New York, NY</div>
-                <div class="job-description">
-                    We need a versatile Full Stack Engineer to work on both frontend and backend systems. 
-                    Experience with Python/Django, JavaScript/React, and cloud platforms required. 
-                    Great opportunity for career growth!
-                </div>
-            </div>
-            
-            <div class="job-card">
-                <div class="job-title">Data Science Manager</div>
-                <div class="job-company">🏢 Analytics Pro</div>
-                <div class="job-location">📍 Chicago, IL</div>
-                <div class="job-description">
-                    Lead our data science team in developing machine learning models and analytics solutions. 
-                    Looking for someone with 7+ years experience in Python, SQL, machine learning, and team leadership.
-                </div>
-            </div>
-            
-            <div class="job-card">
-                <div class="job-title">DevOps Engineer</div>
-                <div class="job-company">🏢 CloudFirst</div>
-                <div class="job-location">📍 Austin, TX</div>
-                <div class="job-description">
-                    Help us build and maintain scalable cloud infrastructure. Experience with AWS, Docker, 
-                    Kubernetes, and CI/CD pipelines essential. Join a team that values automation and efficiency.
-                </div>
-            </div>
-            
-            <footer style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
-                <p>💻 <strong>Job Portal Demo</strong> - Built with Django & deployed on Vercel</p>
-                <p>🌐 <strong>Live URL:</strong> <a href="https://job-search-five-sage.vercel.app" target="_blank">https://job-search-five-sage.vercel.app</a></p>
-                <p>📚 This is a demonstration of a Django job portal application</p>
-            </footer>
         </div>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1 class="display-4 fw-bold mb-4">Find Your Dream Job</h1>
+                        <p class="lead mb-4">Connect with top employers and discover opportunities that match your skills and aspirations.</p>
+                        <div class="d-flex gap-3">
+                            <a href="/jobs/" class="btn btn-light btn-lg">Browse Jobs</a>
+                            <a href="/accounts/register/" class="btn btn-outline-light btn-lg">Join Now</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <i class="fas fa-search-location" style="font-size: 8rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card shadow">
+                            <div class="card-body p-4">
+                                <h3 class="text-center mb-4">Search Jobs</h3>
+                                <form method="GET" action="/jobs/">
+                                    <div class="input-group input-group-lg">
+                                        <input type="text" class="form-control" placeholder="Enter job title, company, or keywords..." name="search">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-search me-2"></i>Search
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Latest Jobs Section -->
+        <section class="py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Latest Job Opportunities</h2>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card job-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">Senior Python Developer</h5>
+                                    <small class="text-muted">Dec 15, 2024</small>
+                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <i class="fas fa-building me-1"></i>TechCorp Solutions
+                                </h6>
+                                <p class="text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>San Francisco, CA
+                                </p>
+                                <p class="card-text">We are looking for an experienced Python developer to join our growing team. You'll work on exciting projects using Django, PostgreSQL, and modern web technologies.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
+                                    <small class="text-muted">by John Smith</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card job-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">Frontend React Developer</h5>
+                                    <small class="text-muted">Dec 14, 2024</small>
+                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <i class="fas fa-building me-1"></i>StartupX
+                                </h6>
+                                <p class="text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Remote
+                                </p>
+                                <p class="card-text">Join our dynamic startup as a Frontend Developer! You'll build amazing user interfaces using React, TypeScript, and modern CSS frameworks.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
+                                    <small class="text-muted">by Sarah Johnson</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card job-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">Full Stack Engineer</h5>
+                                    <small class="text-muted">Dec 13, 2024</small>
+                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <i class="fas fa-building me-1"></i>Digital Innovations Ltd
+                                </h6>
+                                <p class="text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>New York, NY
+                                </p>
+                                <p class="card-text">We need a versatile Full Stack Engineer to work on both frontend and backend systems. Experience with Python/Django, JavaScript/React required.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
+                                    <small class="text-muted">by Mike Wilson</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card job-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title text-primary">Data Science Manager</h5>
+                                    <small class="text-muted">Dec 12, 2024</small>
+                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    <i class="fas fa-building me-1"></i>Analytics Pro
+                                </h6>
+                                <p class="text-muted mb-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Chicago, IL
+                                </p>
+                                <p class="card-text">Lead our data science team in developing machine learning models and analytics solutions. Looking for 7+ years experience in Python, SQL, machine learning.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
+                                    <small class="text-muted">by Lisa Chen</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="/jobs/" class="btn btn-outline-primary">View All Jobs</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
+                                <h3 class="text-primary">4</h3>
+                                <p class="text-muted">Active Jobs</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <i class="fas fa-building fa-3x text-success mb-3"></i>
+                                <h3 class="text-success">50+</h3>
+                                <p class="text-muted">Companies</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <i class="fas fa-users fa-3x text-info mb-3"></i>
+                                <h3 class="text-info">1000+</h3>
+                                <p class="text-muted">Job Seekers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-briefcase me-2"></i>JobPortal</h5>
+                        <p>Find your dream job or hire the perfect candidate.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p>&copy; 2025 JobPortal. All rights reserved.</p>
+                        <div class="social-links">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
     """)
 
 @csrf_exempt
 def demo_view(request):
-    """Generic demo view for all pages"""
+    """Generic demo view matching original Django template design"""
     page_name = request.path.strip('/').replace('/', ' - ').title() or 'Home'
+    
+    # Determine page-specific content
+    page_content = ""
+    if 'jobs' in request.path:
+        page_content = """
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card job-card">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Senior Python Developer</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="fas fa-building me-1"></i>TechCorp Solutions
+                        </h6>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-map-marker-alt me-1"></i>San Francisco, CA
+                        </p>
+                        <p class="card-text">We are looking for an experienced Python developer...</p>
+                        <a href="#" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card job-card">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Frontend React Developer</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="fas fa-building me-1"></i>StartupX
+                        </h6>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-map-marker-alt me-1"></i>Remote
+                        </p>
+                        <p class="card-text">Join our dynamic startup as a Frontend Developer...</p>
+                        <a href="#" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card job-card">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Full Stack Engineer</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <i class="fas fa-building me-1"></i>Digital Innovations
+                        </h6>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-map-marker-alt me-1"></i>New York, NY
+                        </p>
+                        <p class="card-text">We need a versatile Full Stack Engineer...</p>
+                        <a href="#" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+    elif 'register' in request.path:
+        page_content = """
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="text-primary">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </h2>
+                            <p class="text-muted">Join our job portal to find opportunities or hire talent</p>
+                        </div>
+                        
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-user me-1"></i>First Name
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="First name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-user me-1"></i>Last Name
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="Last name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-at me-1"></i>Username
+                                </label>
+                                <input type="text" class="form-control" placeholder="Choose a username" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>Email
+                                </label>
+                                <input type="email" class="form-control" placeholder="Enter your email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-briefcase me-1"></i>I am a
+                                </label>
+                                <select class="form-select" required>
+                                    <option value="">Select your role</option>
+                                    <option value="applicant">Job Seeker</option>
+                                    <option value="employer">Employer</option>
+                                </select>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-phone me-1"></i>Phone (Optional)
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="Phone number">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt me-1"></i>Location (Optional)
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="City, State">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-info-circle me-1"></i>Bio (Optional)
+                                </label>
+                                <textarea class="form-control" rows="3" placeholder="Tell us about yourself..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Password
+                                </label>
+                                <input type="password" class="form-control" placeholder="Create a password" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Confirm Password
+                                </label>
+                                <input type="password" class="form-control" placeholder="Confirm your password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                            
+                            <div class="text-center">
+                                <p class="mb-0">Already have an account? 
+                                    <a href="/accounts/login/" class="text-decoration-none">Sign in here</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+    elif 'login' in request.path:
+        page_content = """
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="text-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Welcome Back
+                            </h2>
+                            <p class="text-muted">Sign in to your account</p>
+                        </div>
+                        
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-1"></i>Username
+                                </label>
+                                <input type="text" class="form-control form-control-lg" placeholder="Enter your username" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Password
+                                </label>
+                                <input type="password" class="form-control form-control-lg" placeholder="Enter your password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                            </button>
+                            
+                            <div class="text-center">
+                                <p class="mb-0">Don't have an account? 
+                                    <a href="/accounts/register/" class="text-decoration-none">Create one here</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
+    elif 'post-job' in request.path:
+        page_content = """
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="text-primary">
+                                <i class="fas fa-plus-circle me-2"></i>Post a New Job
+                            </h2>
+                            <p class="text-muted">Fill out the details to attract the right candidates</p>
+                        </div>
+                        
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-briefcase me-1"></i>Job Title *
+                                </label>
+                                <input type="text" class="form-control" placeholder="e.g. Senior Python Developer" style="border: 2px solid #e9ecef; border-radius: 8px; padding: 12px 16px; font-size: 1rem;">
+                                <div class="form-text">Enter a clear, descriptive job title</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-building me-1"></i>Company Name *
+                                </label>
+                                <input type="text" class="form-control" placeholder="Your company name" style="border: 2px solid #e9ecef; border-radius: 8px; padding: 12px 16px; font-size: 1rem;">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Location *
+                                </label>
+                                <input type="text" class="form-control" placeholder="City, State or Remote" style="border: 2px solid #e9ecef; border-radius: 8px; padding: 12px 16px; font-size: 1rem;">
+                                <div class="form-text">City, State or Remote</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">
+                                    <i class="fas fa-file-alt me-1"></i>Job Description *
+                                </label>
+                                <textarea class="form-control" rows="8" placeholder="Include job responsibilities, requirements, qualifications, and any other relevant information..." style="border: 2px solid #e9ecef; border-radius: 8px; padding: 12px 16px; font-size: 1rem; min-height: 150px; resize: vertical;"></textarea>
+                                <div class="form-text">
+                                    Include job responsibilities, requirements, qualifications, and any other relevant information
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Post Job
+                                </button>
+                                <a href="/jobs/" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """
     
     return HttpResponse(f"""
     <!DOCTYPE html>
@@ -185,93 +583,170 @@ def demo_view(request):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Job Portal - {page_name}</title>
+        <title>{page_name} - Job Portal</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
-            body {{ 
-                font-family: Arial, sans-serif; 
-                margin: 0; 
-                padding: 20px; 
-                background-color: #f5f5f5; 
+            .navbar-brand {{
+                font-weight: bold;
+                color: #007bff !important;
             }}
-            .container {{ 
-                max-width: 800px; 
-                margin: 0 auto; 
-                background: white; 
-                padding: 30px; 
-                border-radius: 8px; 
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-                text-align: center;
+            .job-card {{
+                transition: transform 0.2s;
+                border: 1px solid #dee2e6;
             }}
-            .header {{ 
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                color: white; 
-                padding: 20px; 
-                border-radius: 8px; 
-                margin-bottom: 30px; 
+            .job-card:hover {{
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }}
-            .demo-notice {{ 
-                background: #fff3cd; 
-                border: 1px solid #ffeaa7; 
-                color: #856404; 
-                padding: 15px; 
-                border-radius: 5px; 
-                margin: 20px 0; 
+            .footer {{
+                background-color: #343a40;
+                color: white;
+                padding: 20px 0;
+                margin-top: 50px;
             }}
-            .nav-links {{ 
-                margin: 30px 0; 
+            .btn-primary {{
+                background-color: #667eea;
+                border-color: #667eea;
             }}
-            .nav-links a {{ 
-                margin: 0 10px; 
-                padding: 10px 20px; 
-                background: #667eea; 
-                color: white; 
-                text-decoration: none; 
-                border-radius: 5px; 
-                display: inline-block; 
-                margin-bottom: 10px;
+            .btn-primary:hover {{
+                background-color: #5a6fd8;
+                border-color: #5a6fd8;
             }}
-            .nav-links a:hover {{ 
-                background: #764ba2; 
+            .demo-notice {{
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                color: #856404;
+                padding: 10px 15px;
+                border-radius: 5px;
+                margin: 10px 0;
+                font-size: 0.9em;
+            }}
+            .page-header {{
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 60px 0;
             }}
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="header">
-                <h1>🚀 Job Portal - {page_name}</h1>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-briefcase me-2"></i>JobPortal
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class="fas fa-home me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/jobs/">
+                                <i class="fas fa-search me-1"></i>Browse Jobs
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/login/">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/accounts/register/">
+                                <i class="fas fa-user-plus me-1"></i>Register
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            
+        </nav>
+
+        <!-- Demo Notice -->
+        <div class="container mt-3">
             <div class="demo-notice">
                 <strong>📢 Demo Mode:</strong> This is a static demo page. 
                 In a full deployment, this would be a functional {page_name.lower()} page 
                 with user authentication, database integration, and full CRUD operations.
             </div>
-            
-            <h2>🔧 What this page would normally do:</h2>
-            <div style="text-align: left; max-width: 600px; margin: 0 auto;">
-                {"".join([
-                    "<p><strong>🏠 Home:</strong> Display featured jobs, search functionality, and recent postings</p>",
-                    "<p><strong>💼 Jobs:</strong> Browse all available jobs with filtering and pagination</p>",
-                    "<p><strong>👤 Register:</strong> User registration with email verification</p>",
-                    "<p><strong>🔐 Login:</strong> User authentication and session management</p>",
-                    "<p><strong>📝 Post Job:</strong> Employers can post new job listings</p>",
-                    "<p><strong>📋 Applications:</strong> Track job applications and status</p>"
-                ])}
-            </div>
-            
-            <div class="nav-links">
-                <a href="/">🏠 Back to Home</a>
-                <a href="/jobs/">💼 Browse Jobs</a>
-                <a href="/accounts/register/">👤 Register</a>
-                <a href="/accounts/login/">🔐 Login</a>
-                <a href="/post-job/">📝 Post Job</a>
-            </div>
-            
-            <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
-                <p>💻 <strong>Job Portal Demo</strong> - Built with Django & deployed on Vercel</p>
-                <p>🌐 For full functionality, run locally with SQLite or deploy with PostgreSQL</p>
-            </footer>
         </div>
+
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h1 class="display-5 fw-bold">{page_name}</h1>
+                        <p class="lead">Experience the full functionality of our Django job portal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="py-5">
+            <div class="container">
+                {page_content}
+                
+                {("" if page_content else f"""
+                <div class="text-center">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-5">
+                                    <h3 class="mb-4">🔧 What this page would normally do:</h3>
+                                    <div class="text-start">
+                                        <p><strong>🏠 Home:</strong> Display featured jobs, search functionality, and recent postings</p>
+                                        <p><strong>💼 Jobs:</strong> Browse all available jobs with filtering and pagination</p>
+                                        <p><strong>👤 Register:</strong> User registration with email verification</p>
+                                        <p><strong>🔐 Login:</strong> User authentication and session management</p>
+                                        <p><strong>📝 Post Job:</strong> Employers can post new job listings</p>
+                                        <p><strong>📋 Applications:</strong> Track job applications and status</p>
+                                    </div>
+                                    
+                                    <div class="mt-4">
+                                        <a href="/" class="btn btn-primary me-2">🏠 Back to Home</a>
+                                        <a href="/jobs/" class="btn btn-outline-primary">💼 Browse Jobs</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                """)}
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-briefcase me-2"></i>JobPortal</h5>
+                        <p>Find your dream job or hire the perfect candidate.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p>&copy; 2025 JobPortal. All rights reserved.</p>
+                        <div class="social-links">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
     """)
