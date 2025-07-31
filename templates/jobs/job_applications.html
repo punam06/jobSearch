@@ -89,11 +89,19 @@
                                     
                                     <div class="col-md-4">
                                         <div class="text-center">
+                                            <!-- Application Status -->
+                                            <div class="mb-3">
+                                                <h6 class="fw-bold mb-2">Status:</h6>
+                                                <span class="badge fs-6 status-badge status-{{ application.status }}" id="status-{{ application.id }}">
+                                                    {{ application.get_status_display }}
+                                                </span>
+                                            </div>
+                                            
                                             {% if application.resume %}
                                                 <div class="mb-3">
                                                     <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
                                                     <br>
-                                                    <a href="{{ application.resume.url }}" target="_blank" class="btn btn-primary btn-sm">
+                                                    <a href="{{ application.resume.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                         <i class="fas fa-download me-1"></i>Download Resume
                                                     </a>
                                                 </div>
@@ -106,12 +114,22 @@
                                             {% endif %}
                                             
                                             <div class="d-grid gap-2">
-                                                <button class="btn btn-success btn-sm">
-                                                    <i class="fas fa-check me-1"></i>Shortlist
-                                                </button>
-                                                <button class="btn btn-outline-danger btn-sm">
-                                                    <i class="fas fa-times me-1"></i>Reject
-                                                </button>
+                                                {% if application.status != 'approved' %}
+                                                    <button class="btn btn-success btn-sm approve-btn" 
+                                                            data-application-id="{{ application.id }}"
+                                                            data-bs-toggle="tooltip" 
+                                                            title="Approve this application">
+                                                        <i class="fas fa-check me-1"></i>Approve
+                                                    </button>
+                                                {% endif %}
+                                                {% if application.status != 'rejected' %}
+                                                    <button class="btn btn-danger btn-sm reject-btn" 
+                                                            data-application-id="{{ application.id }}"
+                                                            data-bs-toggle="tooltip" 
+                                                            title="Reject this application">
+                                                        <i class="fas fa-times me-1"></i>Reject
+                                                    </button>
+                                                {% endif %}
                                                 <a href="mailto:{{ application.applicant.email }}" class="btn btn-outline-primary btn-sm">
                                                     <i class="fas fa-envelope me-1"></i>Contact
                                                 </a>
@@ -150,5 +168,120 @@
 .avatar {
     font-size: 1.2rem;
 }
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.status-pending {
+    background-color: #6c757d;
+    color: white;
+}
+
+.status-approved {
+    background-color: #198754;
+    color: white;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+    color: white;
+}
+
+.approve-btn:disabled, .reject-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Handle approve/reject buttons
+    document.querySelectorAll('.approve-btn, .reject-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const applicationId = this.dataset.applicationId;
+            const status = this.classList.contains('approve-btn') ? 'approved' : 'rejected';
+            const statusText = status === 'approved' ? 'Approved' : 'Rejected';
+            
+            if (confirm(`Are you sure you want to ${status === 'approved' ? 'approve' : 'reject'} this application?`)) {
+                updateApplicationStatus(applicationId, status, statusText, this);
+            }
+        });
+    });
+});
+
+function updateApplicationStatus(applicationId, status, statusText, buttonElement) {
+    // Disable button during processing
+    buttonElement.disabled = true;
+    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processing...';
+    
+    // Create form data
+    const formData = new FormData();
+    formData.append('status', status);
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    
+    fetch(`/applications/${applicationId}/update-status/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update status badge
+            const statusBadge = document.getElementById(`status-${applicationId}`);
+            statusBadge.textContent = statusText;
+            statusBadge.className = `badge fs-6 status-badge status-${status}`;
+            
+            // Hide the clicked button and show success message
+            const buttonContainer = buttonElement.parentElement;
+            const otherButton = buttonContainer.querySelector(status === 'approved' ? '.reject-btn' : '.approve-btn');
+            
+            buttonElement.style.display = 'none';
+            if (otherButton) {
+                otherButton.style.display = 'none';
+            }
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = `alert alert-${status === 'approved' ? 'success' : 'danger'} alert-sm mt-2`;
+            successMessage.innerHTML = `<i class="fas fa-check me-1"></i>Application ${statusText.toLowerCase()} successfully!`;
+            buttonContainer.appendChild(successMessage);
+            
+            // Auto-hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        } else {
+            alert('Error updating application status: ' + (data.error || 'Unknown error'));
+            // Re-enable button
+            buttonElement.disabled = false;
+            buttonElement.innerHTML = status === 'approved' ? 
+                '<i class="fas fa-check me-1"></i>Approve' : 
+                '<i class="fas fa-times me-1"></i>Reject';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating application status. Please try again.');
+        // Re-enable button
+        buttonElement.disabled = false;
+        buttonElement.innerHTML = status === 'approved' ? 
+            '<i class="fas fa-check me-1"></i>Approve' : 
+            '<i class="fas fa-times me-1"></i>Reject';
+    });
+}
+</script>
+
+<!-- Add CSRF token for AJAX requests -->
+{% csrf_token %}
 {% endblock %}

@@ -15,6 +15,25 @@
                 </a>
             </div>
             
+            <!-- Status Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Filter by Status:</h6>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'my_applications' %}" 
+                           class="btn btn-sm {% if not current_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                            All Applications
+                        </a>
+                        {% for status_value, status_label in status_choices %}
+                            <a href="{% url 'my_applications' %}?status={{ status_value }}" 
+                               class="btn btn-sm {% if current_filter == status_value %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                                {{ status_label }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
             {% if applications %}
                 <div class="row">
                     {% for application in applications %}
@@ -23,7 +42,9 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <h5 class="card-title text-primary">{{ application.job.title }}</h5>
-                                        <span class="badge bg-warning">Under Review</span>
+                                        <span class="badge status-badge status-{{ application.status }}">
+                                            {{ application.get_status_display }}
+                                        </span>
                                     </div>
                                     
                                     <h6 class="card-subtitle mb-2 text-muted">
@@ -34,6 +55,9 @@
                                     </p>
                                     <p class="text-muted mb-3">
                                         <i class="fas fa-calendar me-1"></i>Applied {{ application.applied_at|date:"M d, Y" }}
+                                        {% if application.updated_at != application.applied_at %}
+                                            <br><small><i class="fas fa-sync me-1"></i>Updated {{ application.updated_at|date:"M d, Y" }}</small>
+                                        {% endif %}
                                     </p>
                                     
                                     <div class="mb-3">
@@ -85,17 +109,32 @@
                             <div class="card-body">
                                 <h5 class="text-center mb-4">Application Statistics</h5>
                                 <div class="row text-center">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
                                         <h4 class="text-primary">{{ applications.count }}</h4>
                                         <p class="text-muted">Total Applications</p>
                                     </div>
-                                    <div class="col-md-4">
-                                        <i class="fas fa-clock fa-2x text-warning mb-2"></i>
-                                        <h4 class="text-warning">{{ applications.count }}</h4>
-                                        <p class="text-muted">Pending Review</p>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-clock fa-2x text-secondary mb-2"></i>
+                                        <h4 class="text-secondary">{{ applications|length }}</h4>
+                                        <p class="text-muted">
+                                            {% if current_filter %}
+                                                {{ current_filter|title }}
+                                            {% else %}
+                                                Current View
+                                            {% endif %}
+                                        </p>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                        <h4 class="text-success">
+                                            {% for app in applications %}
+                                                {% if app.status == 'approved' %}{{ forloop.counter0|add:1 }}{% endif %}
+                                            {% empty %}0{% endfor %}
+                                        </h4>
+                                        <p class="text-muted">Approved</p>
+                                    </div>
+                                    <div class="col-md-3">
                                         <i class="fas fa-calendar fa-2x text-info mb-2"></i>
                                         <h4 class="text-info">
                                             {% if applications %}
@@ -114,11 +153,26 @@
             {% else %}
                 <div class="text-center py-5">
                     <i class="fas fa-file-alt fa-5x text-muted mb-4"></i>
-                    <h3 class="text-muted">No applications yet</h3>
-                    <p class="text-muted lead">Start your job search journey by applying to exciting opportunities.</p>
-                    <a href="{% url 'job_list' %}" class="btn btn-success btn-lg">
-                        <i class="fas fa-search me-2"></i>Browse Jobs
-                    </a>
+                    <h3 class="text-muted">
+                        {% if current_filter %}
+                            No {{ current_filter }} applications
+                        {% else %}
+                            No applications yet
+                        {% endif %}
+                    </h3>
+                    <p class="text-muted lead">
+                        {% if current_filter %}
+                            You don't have any {{ current_filter }} applications. 
+                            <a href="{% url 'my_applications' %}">View all applications</a>
+                        {% else %}
+                            Start your job search journey by applying to exciting opportunities.
+                        {% endif %}
+                    </p>
+                    {% if not current_filter %}
+                        <a href="{% url 'job_list' %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-search me-2"></i>Browse Jobs
+                        </a>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>
@@ -133,6 +187,27 @@
 .application-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+}
+
+.status-pending {
+    background-color: #6c757d;
+    color: white;
+}
+
+.status-approved {
+    background-color: #198754;
+    color: white;
+}
+
+.status-rejected {
+    background-color: #dc3545;
+    color: white;
 }
 </style>
 {% endblock %}

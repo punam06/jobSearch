@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from .models import Job, Application
 from .forms import JobForm, ApplicationForm, JobSearchForm
 from accounts.models import UserProfile
@@ -156,5 +158,39 @@ def my_applications(request):
     
     applications = Application.objects.filter(applicant=request.user)
     
-    context = {'applications': applications}
+    # Filter by status if provided
+    status_filter = request.GET.get('status')
+    if status_filter and status_filter in ['pending', 'approved', 'rejected']:
+        applications = applications.filter(status=status_filter)
+    
+    context = {
+        'applications': applications,
+        'current_filter': status_filter,
+        'status_choices': Application.STATUS_CHOICES
+    }
     return render(request, 'jobs/my_applications.html', context)
+
+@login_required
+@require_POST
+def update_application_status(request, application_id):
+    """Update the status of an application"""
+    application = get_object_or_404(Application, id=application_id)
+    
+    # Check if user is the employer who posted the job
+    if application.job.posted_by != request.user:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    
+    new_status = request.POST.get('status')
+    if new_status not in ['approved', 'rejected']:
+        return JsonResponse({'error': 'Invalid status'}, status=400)
+    
+    application.status = new_status
+    application.save()
+    
+    status_text = 'Approved' if new_status == 'approved' else 'Rejected'
+    return JsonResponse({
+        'success': True, 
+        'status': new_status,
+        'status_text': status_text,
+        'status_color': application.get_status_color()
+    })

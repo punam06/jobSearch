@@ -1,15 +1,7 @@
-{
-  "build": {
-    "builder": "NIXPACKS"
-  },
-  "deploy": {
-    "startCommand": "python manage.py migrate && python create_production_data.py && python manage.py collectstatic --noinput && gunicorn jobportal.wsgi:application",
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
-  },
-  "environments": {
-    "DATABASE_URL": "${{PostgreSQL.DATABASE_URL}}",
-    "DEBUG": "False",
-    "SECRET_KEY": "${{RAILWAY_STATIC_URL}}"
-  }
-}
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+startCommand = "./start.sh"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3

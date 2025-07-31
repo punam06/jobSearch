@@ -12,10 +12,11 @@ class JobAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('applicant', 'job_title', 'company_name', 'applied_at')
-    list_filter = ('applied_at', 'job__company_name')
+    list_display = ('applicant', 'job_title', 'company_name', 'status', 'applied_at', 'updated_at')
+    list_filter = ('status', 'applied_at', 'updated_at', 'job__company_name')
     search_fields = ('applicant__username', 'applicant__email', 'job__title', 'job__company_name')
-    readonly_fields = ('applied_at',)
+    readonly_fields = ('applied_at', 'updated_at')
+    list_editable = ('status',)
     date_hierarchy = 'applied_at'
     
     def job_title(self, obj):
