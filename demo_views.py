@@ -154,98 +154,13 @@ def demo_home(request):
             <div class="container">
                 <h2 class="text-center mb-5">Latest Job Opportunities</h2>
                 
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card job-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title text-primary">Senior Python Developer</h5>
-                                    <small class="text-muted">Dec 15, 2024</small>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <i class="fas fa-building me-1"></i>TechCorp Solutions
-                                </h6>
-                                <p class="text-muted mb-3">
-                                    <i class="fas fa-map-marker-alt me-1"></i>San Francisco, CA
-                                </p>
-                                <p class="card-text">We are looking for an experienced Python developer to join our growing team. You'll work on exciting projects using Django, PostgreSQL, and modern web technologies.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
-                                    <small class="text-muted">by John Smith</small>
-                                </div>
-                            </div>
-                        </div>
+                <div class="text-center">
+                    <div class="py-5">
+                        <i class="fas fa-search" style="font-size: 4rem; color: #dee2e6;"></i>
+                        <h4 class="mt-3 text-muted">No jobs found</h4>
+                        <p class="text-muted">No jobs have been posted yet.</p>
+                        <a href="/post-job/" class="btn btn-primary mt-3">Post the First Job</a>
                     </div>
-                    
-                    <div class="col-lg-6 mb-4">
-                        <div class="card job-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title text-primary">Frontend React Developer</h5>
-                                    <small class="text-muted">Dec 14, 2024</small>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <i class="fas fa-building me-1"></i>StartupX
-                                </h6>
-                                <p class="text-muted mb-3">
-                                    <i class="fas fa-map-marker-alt me-1"></i>Remote
-                                </p>
-                                <p class="card-text">Join our dynamic startup as a Frontend Developer! You'll build amazing user interfaces using React, TypeScript, and modern CSS frameworks.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
-                                    <small class="text-muted">by Sarah Johnson</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 mb-4">
-                        <div class="card job-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title text-primary">Full Stack Engineer</h5>
-                                    <small class="text-muted">Dec 13, 2024</small>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <i class="fas fa-building me-1"></i>Digital Innovations Ltd
-                                </h6>
-                                <p class="text-muted mb-3">
-                                    <i class="fas fa-map-marker-alt me-1"></i>New York, NY
-                                </p>
-                                <p class="card-text">We need a versatile Full Stack Engineer to work on both frontend and backend systems. Experience with Python/Django, JavaScript/React required.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
-                                    <small class="text-muted">by Mike Wilson</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6 mb-4">
-                        <div class="card job-card h-100">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="card-title text-primary">Data Science Manager</h5>
-                                    <small class="text-muted">Dec 12, 2024</small>
-                                </div>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <i class="fas fa-building me-1"></i>Analytics Pro
-                                </h6>
-                                <p class="text-muted mb-3">
-                                    <i class="fas fa-map-marker-alt me-1"></i>Chicago, IL
-                                </p>
-                                <p class="card-text">Lead our data science team in developing machine learning models and analytics solutions. Looking for 7+ years experience in Python, SQL, machine learning.</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="/jobs/" class="btn btn-primary">View Details</a>
-                                    <small class="text-muted">by Lisa Chen</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                    <a href="/jobs/" class="btn btn-outline-primary">View All Jobs</a>
                 </div>
             </div>
         </section>
@@ -258,7 +173,7 @@ def demo_home(request):
                         <div class="card border-0">
                             <div class="card-body">
                                 <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
-                                <h3 class="text-primary">4</h3>
+                                <h3 class="text-primary">0</h3>
                                 <p class="text-muted">Active Jobs</p>
                             </div>
                         </div>
@@ -319,51 +234,33 @@ def demo_view(request):
     page_content = ""
     if 'jobs' in request.path:
         page_content = """
-        <div class="row">
-            <div class="col-lg-4 mb-4">
-                <div class="card job-card">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Senior Python Developer</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <i class="fas fa-building me-1"></i>TechCorp Solutions
-                        </h6>
-                        <p class="text-muted mb-3">
-                            <i class="fas fa-map-marker-alt me-1"></i>San Francisco, CA
-                        </p>
-                        <p class="card-text">We are looking for an experienced Python developer...</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
+        <div class="py-3">
+            <h2 class="mb-4">Browse Jobs</h2>
+            
+            <!-- Search Bar -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body p-3">
+                            <form method="GET">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search jobs by title, company, or location..." name="search">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search me-2"></i>Search
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 mb-4">
-                <div class="card job-card">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Frontend React Developer</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <i class="fas fa-building me-1"></i>StartupX
-                        </h6>
-                        <p class="text-muted mb-3">
-                            <i class="fas fa-map-marker-alt me-1"></i>Remote
-                        </p>
-                        <p class="card-text">Join our dynamic startup as a Frontend Developer...</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 mb-4">
-                <div class="card job-card">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Full Stack Engineer</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            <i class="fas fa-building me-1"></i>Digital Innovations
-                        </h6>
-                        <p class="text-muted mb-3">
-                            <i class="fas fa-map-marker-alt me-1"></i>New York, NY
-                        </p>
-                        <p class="card-text">We need a versatile Full Stack Engineer...</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
-                    </div>
-                </div>
+
+            <!-- No Jobs Found -->
+            <div class="text-center py-5">
+                <i class="fas fa-search" style="font-size: 4rem; color: #dee2e6;"></i>
+                <h4 class="mt-3 text-muted">No jobs found</h4>
+                <p class="text-muted">No jobs have been posted yet.</p>
+                <a href="/post-job/" class="btn btn-primary mt-3">Post the First Job</a>
             </div>
         </div>
         """
