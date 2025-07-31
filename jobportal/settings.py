@@ -32,21 +32,31 @@ ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*.railway.
 # Application definition
 
 if 'VERCEL' in os.environ:
-    # For Vercel deployment, use minimal apps configuration (no database-dependent apps)
+    # For Vercel deployment, use full Django apps but with file-based database
     INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
         'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
         'django.contrib.staticfiles',
-        # Remove 'jobs' app to avoid User model imports that need SQLite
+        'accounts',
+        'jobs',
     ]
     
-    # Minimal middleware for Vercel
+    # Full middleware for Vercel
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'whitenoise.middleware.WhiteNoiseMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
     
-    # Use dummy database for Vercel (no SQLite)
+    # Use in-memory SQLite for Vercel
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.dummy',
