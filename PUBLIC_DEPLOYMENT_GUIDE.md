@@ -2,7 +2,7 @@
 
 ## ✅ YOUR APP IS NOW PUBLICLY VISIBLE!
 
-**Public URL**: **https://job-search-flame.vercel.app/**
+**Public URL**: **https://job-search-five-sage.vercel.app/**
 
 ## How It Works - Public Visibility Explained:
 
