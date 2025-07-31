@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-zg5$078u)#$8fr(muc=k+o-(pfh(&kbjwj&*y1-rfz)1sk2vvv')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # For demo purposes
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*']
 
@@ -32,10 +32,16 @@ ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*']
 # Application definition
 
 if 'VERCEL' in os.environ:
-    # Minimal apps for Vercel demo
+    # Full apps for Vercel deployment with SQLite
     INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
         'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
         'django.contrib.staticfiles',
+        'jobs',
+        'accounts',
     ]
 else:
     # Full apps for local development

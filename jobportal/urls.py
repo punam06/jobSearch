@@ -26,13 +26,15 @@ if 'VERCEL' in os.environ:
 
 urlpatterns = []
 
-# For Vercel deployment, use simple demo view
+# For Vercel deployment, serve full Django app with SQLite
 if 'VERCEL' in os.environ:
     urlpatterns = [
-        path('', demo_view, name='demo'),
-        path('admin/', demo_view, name='demo_admin'),
-        path('accounts/', demo_view, name='demo_accounts'),
-        path('jobs/', demo_view, name='demo_jobs'),
+        path('admin/', admin.site.urls),
+        path('', include('jobs.urls')),
+        path('accounts/', include('accounts.urls')),  
+        path('accounts/', include('django.contrib.auth.urls')),
+        # Keep demo as fallback
+        path('demo/', demo_view, name='demo_page'),
     ]
 else:
     # Local development with full functionality
