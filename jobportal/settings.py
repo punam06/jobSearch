@@ -57,11 +57,16 @@ else:
     ]
 
 if 'VERCEL' in os.environ:
-    # Minimal middleware for Vercel demo
+    # Full middleware for Vercel deployment (needed for admin)
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'whitenoise.middleware.WhiteNoiseMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
 else:
     # Full middleware for local development
@@ -96,15 +101,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'jobportal.wsgi.application'
 
 
-# Database - Simple demo setup for Vercel
+# Database - Full SQLite setup for Vercel deployment
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# For demo purposes on Vercel, we'll remove the database dependency
 if 'VERCEL' in os.environ:
-    # Dummy database config for Vercel (we'll handle this differently)
+    # SQLite database for Vercel (persistent within serverless function)
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.dummy',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/tmp/db.sqlite3',  # Use tmp directory for Vercel
         }
     }
 else:

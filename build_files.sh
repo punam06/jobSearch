@@ -5,6 +5,9 @@ echo "BUILD_START"
 
 pip3 install -r requirements.txt
 
+# Set VERCEL environment variable for proper settings
+export VERCEL=1
+
 # Run database migrations
 echo "Running migrations..."
 python3 manage.py migrate --noinput
@@ -13,9 +16,13 @@ python3 manage.py migrate --noinput
 echo "Setting up admin user..."
 python3 manage.py shell -c "
 from django.contrib.auth.models import User
+import os
+os.environ['VERCEL'] = '1'
 if not User.objects.filter(username='admin').exists():
     User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
     print('Admin user created: admin/admin123')
+else:
+    print('Admin user already exists')
 "
 
 # Collect static files
