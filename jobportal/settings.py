@@ -32,17 +32,26 @@ ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '127.0.0.1', 'localhost', '*']
 # Application definition
 
 if 'VERCEL' in os.environ:
-    # Full apps for Vercel deployment with SQLite
+    # For Vercel deployment, use a minimal apps configuration
     INSTALLED_APPS = [
-        'django.contrib.admin',
-        'django.contrib.auth',
         'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.messages',
         'django.contrib.staticfiles',
-        'jobs',
-        'accounts',
+        'jobs',  # Keep for templates but minimal models
     ]
+    
+    # Minimal middleware for Vercel
+    MIDDLEWARE = [
+        'django.middleware.security.SecurityMiddleware',
+        'whitenoise.middleware.WhiteNoiseMiddleware',
+        'django.middleware.common.CommonMiddleware',
+    ]
+    
+    # Use dummy database for Vercel (no SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.dummy',
+        }
+    }
 else:
     # Full apps for local development
     INSTALLED_APPS = [
@@ -55,20 +64,7 @@ else:
         'jobs',
         'accounts',
     ]
-
-if 'VERCEL' in os.environ:
-    # Full middleware for Vercel deployment (needed for admin)
-    MIDDLEWARE = [
-        'django.middleware.security.SecurityMiddleware',
-        'whitenoise.middleware.WhiteNoiseMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    ]
-else:
+    
     # Full middleware for local development
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
@@ -80,6 +76,14 @@ else:
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
+    
+    # Local development with SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 ROOT_URLCONF = 'jobportal.urls'
 
